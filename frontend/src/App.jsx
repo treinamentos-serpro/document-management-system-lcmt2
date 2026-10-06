@@ -1,20 +1,52 @@
-// Seed do componente raiz do Document Management System.
-//
-// Este é apenas um ponto de partida mínimo. Durante o Passo 3 você vai usar o
-// Agent Mode do GitHub Copilot para construir os componentes:
-//   - components/UploadComponent
-//   - components/DocumentList
-//   - components/DownloadButton
-// e o serviço services/ que consome a API do backend via fetch.
+import { useEffect, useState } from 'react';
+import UploadComponent from './components/UploadComponent';
+import DocumentList from './components/DocumentList';
+import { listDocuments } from './services/documents.api';
+import './App.css';
 
 export default function App() {
+  const [documents, setDocuments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setIsLoading(true);
+    setError('');
+
+    async function loadDocuments() {
+      try {
+        const documents = await listDocuments(controller.signal);
+        if (!controller.signal.aborted) setDocuments(documents);
+      } catch (error) {
+        if (!controller.signal.aborted) setError(error.message);
+      } finally {
+        if (!controller.signal.aborted) setIsLoading(false);
+      }
+    }
+
+    loadDocuments();
+    return () => controller.abort();
+  }, [refreshKey]);
+
+  function handleUpload() {
+    setRefreshKey((current) => current + 1);
+  }
+
   return (
-    <main style={{ fontFamily: 'system-ui, sans-serif', padding: '2rem' }}>
-      <h1>Document Management System</h1>
-      <p>
-        Seed do frontend. Construa a interface durante o Passo 3 usando o Agent
-        Mode do GitHub Copilot.
-      </p>
+    <main className="app">
+      <header className="app-header">
+        <p className="app-brand">DMS</p>
+        <h1>Gestão de documentos</h1>
+      </header>
+      <UploadComponent onUpload={handleUpload} />
+      <DocumentList
+        documents={documents}
+        isLoading={isLoading}
+        error={error}
+        onRetry={handleUpload}
+      />
     </main>
   );
 }
