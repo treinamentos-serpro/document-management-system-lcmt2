@@ -21,6 +21,9 @@ Você conduz desenvolvimento orientado a testes seguindo o ciclo Red-Green-Refac
 
 ## Diretrizes
 
-- Use o runner nativo do Node (`node:test`) no backend.
-- Cubra os casos principais: upload, listagem e download.
-- Mantenha os testes pequenos, isolados e legíveis.
+- Consulte `docs/specs/dms-spec.md` para os contratos e critérios do comportamento solicitado; confirme também os padrões nos testes existentes.
+- Use o runner nativo do Node (`node:test`) nos dois pacotes: `backend/test/` e `frontend/test/`.
+- Cubra os fluxos relevantes ao escopo, incluindo erros e limites, não apenas os caminhos felizes de upload, listagem e download.
+- Nos testes frontend, verifique os contratos de `fetch`, `/api`, `FormData`, erros HTTP e cancelamento quando forem pertinentes.
+- Isole os testes e remova arquivos locais criados durante testes de integração.
+- Mantenha os testes pequenos, legíveis e sem dependência de serviços externos.

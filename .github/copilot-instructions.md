@@ -13,6 +13,17 @@ Sistema web para gestão de documentos com:
 - Download de documentos
 - Gestão simples por usuário
 
+## Referência de comportamento
+
+- Consulte [docs/specs/dms-spec.md](../docs/specs/dms-spec.md) para requisitos, contratos HTTP e critérios de aceite.
+- A especificação é o comportamento-alvo; confira o código e os testes antes de assumir que um requisito já está implementado.
+- Se especificação, implementação e testes divergirem, descreva a divergência e mantenha a mudança solicitada dentro do escopo.
+- `X-User-Id` identifica o escopo lógico do usuário, mas não é autenticação nem uma fronteira de segurança.
+
+- O backend usa `backend/src/app.js` para compor a aplicação e `backend/test/` para testes HTTP e de integração.
+- Gere nomes físicos no servidor e não exponha caminhos locais nas respostas públicas.
+- Use a especificação para requisitos de isolamento por usuário, limite de upload e tratamento de falhas; não presuma que já estejam cobertos pelos testes atuais.
+
 ## Stack
 
 - Backend: Node.js + Express (CommonJS)
@@ -61,6 +72,15 @@ Camadas internas não conhecem camadas externas.
 - A comunicação com o backend é feita via `fetch`, através do prefixo `/api`
   (proxy configurado no Vite)
 - Reutilize componentes e evite duplicação
+- Os testes de API do frontend ficam em `frontend/test/`; preserve `AbortSignal`, trate respostas HTTP não-2xx e não defina manualmente `Content-Type` ao enviar `FormData`.
+
+## Comandos
+
+Não há scripts na raiz; execute os comandos no pacote correspondente.
+
+- Backend: em `backend/`, `npm install`, `npm test` ou `npm run dev`.
+- Frontend: em `frontend/`, `npm install`, `node --test`, `npm run build` ou `npm run dev`.
+- O frontend exige Node.js 24 ou superior. Atualmente, seu `package.json` não define um script `test`.
 
 ## Estilo de código
 

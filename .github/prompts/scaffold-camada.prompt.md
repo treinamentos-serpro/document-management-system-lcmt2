@@ -9,6 +9,8 @@ agent: agent
 
 Crie a estrutura completa de uma camada para o recurso `${input:recurso:nome do recurso}` seguindo a Clean Architecture simples do projeto.
 
+Antes de editar, consulte `docs/specs/dms-spec.md` e os arquivos vizinhos do recurso para respeitar contratos e padrões existentes. Trate a especificação como comportamento-alvo e não presuma que requisitos já estejam implementados.
+
 Gere os arquivos em `backend/src`:
 
 1. `routes/${input:recurso}.routes.js` - define os endpoints e delega ao controller.
@@ -19,6 +21,7 @@ Gere os arquivos em `backend/src`:
 Requisitos:
 
 - Respeite o fluxo `routes -> controllers -> services -> repositories`.
+- Mantenha a alteração no escopo da camada solicitada e inclua os testes necessários para validar seu comportamento, sem expandir o escopo.
 - Uploads gravados no filesystem local via multer com diskStorage.
 - Metadados em memória nesta fase.
 - Trate erros nos limites do sistema.
